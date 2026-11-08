@@ -207,25 +207,17 @@
           </nav>
         </div>
 
-        <!-- Atajos de Teclado Rápido -->
+        <!-- PARÁMETROS FISCALES -->
         <div class="bg-slate-800/80 rounded-lg p-3 border border-slate-700/60 text-[11px] text-slate-300">
-          <p class="font-bold text-brand-gold uppercase text-[10px] tracking-wider mb-2">Atajos de Teclado</p>
-          <div class="space-y-1.5 font-mono text-[11px]">
-            <div class="flex justify-between">
-              <span class="text-slate-400">Facturar / Cobrar:</span>
-              <kbd class="bg-slate-900 px-1.5 py-0.5 rounded text-white border border-slate-700">F12</kbd>
+          <p class="font-bold text-brand-gold uppercase text-[10px] tracking-wider mb-2">PARÁMETROS FISCALES</p>
+          <div class="space-y-2 font-mono text-[11px]">
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400 font-sans">IVA por Ley:</span>
+              <span class="text-emerald-400 font-bold bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/60">13%</span>
             </div>
-            <div class="flex justify-between">
-              <span class="text-slate-400">Cerrar / Cancelar:</span>
-              <kbd class="bg-slate-900 px-1.5 py-0.5 rounded text-white border border-slate-700">Esc</kbd>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-slate-400">IVA por Ley:</span>
-              <span class="text-emerald-400 font-bold">13%</span>
-            </div>
-            <div class="flex justify-between">
-              <span class="text-slate-400">Retención Gran Cont.:</span>
-              <span class="text-amber-400 font-bold">1% (≥$100)</span>
+            <div class="flex justify-between items-center">
+              <span class="text-slate-400 font-sans">Retención Gran Cont.:</span>
+              <span class="text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded border border-amber-800/60">1% (≥ $100)</span>
             </div>
           </div>
         </div>
@@ -339,7 +331,9 @@
                 <input
                   id="cust-fac-doc"
                   type="text"
-                  placeholder="DUI o Documento de Identidad (Opcional)"
+                  inputmode="numeric"
+                  maxlength="9"
+                  placeholder="DUI del Cliente (8 o 9 dígitos numéricos)"
                   class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-navy font-mono"
                 />
               </div>
@@ -440,7 +434,7 @@
                 id="btn-clear-cart"
                 class="col-span-1 py-2.5 px-3 rounded-lg text-xs font-semibold bg-slate-200 hover:bg-slate-300 text-slate-700 transition-colors"
               >
-                Limpiar [Esc]
+                Limpiar Ticket
               </button>
               <button
                 id="btn-checkout"
@@ -450,7 +444,7 @@
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                 </svg>
-                <span>Facturar & Asiento [F12]</span>
+                <span>Facturar</span>
               </button>
             </div>
           </div>

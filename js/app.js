@@ -126,7 +126,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initNavigation();
   initSearchAndFilters();
   initCustomerForm();
-  initShortcuts();
   initModalEvents();
 
   renderAll();
@@ -299,7 +298,19 @@ function initCustomerForm() {
   };
 
   bindInput('cust-fac-name', 'name');
-  bindInput('cust-fac-doc', 'docNumber');
+
+  // Control estricto de DUI: solo números y límite estricto de 8 a 9 dígitos
+  const facDocInput = document.getElementById('cust-fac-doc');
+  if (facDocInput) {
+    const sanitizeDui = () => {
+      const digitsOnly = facDocInput.value.replace(/\D/g, '').slice(0, 9);
+      facDocInput.value = digitsOnly;
+      state.customer.docNumber = digitsOnly;
+    };
+    facDocInput.addEventListener('input', sanitizeDui);
+    facDocInput.addEventListener('paste', () => setTimeout(sanitizeDui, 0));
+  }
+
   bindInput('cust-ccf-name', 'businessName');
   bindInput('cust-ccf-nrc', 'nrc');
   bindInput('cust-ccf-nit', 'nit');
@@ -324,22 +335,6 @@ function initCustomerForm() {
   if (checkoutBtn) {
     checkoutBtn.addEventListener('click', () => processCheckout());
   }
-}
-
-function initShortcuts() {
-  window.addEventListener('keydown', e => {
-    if (e.key === 'F12') {
-      e.preventDefault();
-      if (state.activeTab === 'pos') {
-        processCheckout();
-      }
-    } else if (e.key === 'Escape') {
-      const modal = document.getElementById('voucher-modal');
-      if (modal && !modal.classList.contains('hidden')) {
-        closeVoucherModal();
-      }
-    }
-  });
 }
 
 function initModalEvents() {

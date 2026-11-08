@@ -128,6 +128,15 @@ export function validateCustomerData(docType, customer) {
     if (!customer.name || !customer.name.trim()) {
       customer.name = 'Cliente Mostrador / Consumidor Final';
     }
+    // Validación estricta de DUI si se proporciona: solo números, 8 o 9 dígitos
+    if (customer.docNumber && customer.docNumber.trim()) {
+      const cleanDoc = customer.docNumber.replace(/\D/g, '');
+      if (cleanDoc.length < 8 || cleanDoc.length > 9) {
+        errors.push('El DUI del cliente debe contener exactamente 8 o 9 dígitos numéricos.');
+      } else {
+        customer.docNumber = cleanDoc;
+      }
+    }
   }
 
   return {
