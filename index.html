@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full bg-slate-100">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>POS, Facturación y Contabilidad — Comercial Perla de Oriente S.A. de C.V.</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              navy: '#0F3C6E',
+              dark: '#0A2544',
+              gold: '#C89D52',
+              pearl: '#EADCC1',
+              pearlLight: '#FDFBF7'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace']
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    /* Estilos de Impresión Profesional para Comprobante Fiscal */
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #voucher-modal,
+      #voucher-modal * {
+        visibility: visible;
+      }
+      #voucher-modal {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        background: white !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+      }
+      #voucher-modal-card {
+        box-shadow: none !important;
+        border: none !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        padding: 0 !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="h-full flex flex-col font-sans text-slate-800 antialiased overflow-hidden">
+
+  <!-- 1. HEADER SUPERIOR INSTITUCIONAL -->
+  <header class="bg-brand-dark border-b border-brand-navy/60 text-white px-5 py-2.5 flex items-center justify-between shrink-0 shadow-md z-20">
+    <div class="flex items-center gap-3">
+      <!-- Logotipo -->
+      <div class="flex items-center gap-2.5">
+        <img
+          src="./logo.jpg"
+          alt="Perla de Oriente"
+          class="h-9 w-auto rounded object-contain bg-white/10 p-0.5 border border-white/20"
+          onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' width=\'36\' height=\'36\' viewBox=\'0 0 36 36\'><rect width=\'36\' height=\'36\' rx=\'6\' fill=\'%230F3C6E\'/><text x=\'50%25\' y=\'55%25\' font-size=\'14\' font-weight=\'bold\' fill=\'%23C89D52\' text-anchor=\'middle\' dominant-baseline=\'middle\'>PO</text></svg>';"
+        />
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-sm font-extrabold tracking-tight text-white leading-tight">
+              COMERCIAL PERLA DE ORIENTE
+            </h1>
+            <span class="text-[10px] font-bold text-brand-gold bg-brand-gold/15 border border-brand-gold/30 px-1.5 py-0.2 rounded font-mono">
+              S.A. DE C.V.
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-tight">
+            Sistema Integral: POS · Facturación Electrónica DTE · Contabilidad NIIF
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicadores de Sucursal, DTE y Reloj -->
+    <div class="flex items-center gap-4 text-xs">
+      <!-- Sucursal y Terminal -->
+      <div class="hidden md:flex items-center gap-1.5 text-slate-300 bg-white/5 px-2.5 py-1 rounded-md border border-white/10">
+        <svg class="w-3.5 h-3.5 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+        </svg>
+        <span>Sucursal Central San Miguel</span>
+        <span class="text-slate-500">|</span>
+        <span class="font-mono text-brand-pearl font-bold">Caja 01</span>
+      </div>
+
+      <!-- Estado DTE Hacienda -->
+      <div class="flex items-center gap-1.5 bg-emerald-950/60 text-emerald-400 border border-emerald-700/60 px-2.5 py-1 rounded-full text-[11px] font-semibold">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span class="hidden sm:inline">DTE Hacienda:</span> En Línea
+      </div>
+
+      <!-- Reloj Digital -->
+      <div class="flex items-center gap-1 text-slate-200 font-mono text-xs font-semibold bg-white/5 px-2.5 py-1 rounded-md border border-white/10">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <span id="live-clock">--:--:--</span>
+      </div>
+
+      <!-- Botón Reiniciar Demo -->
+      <button
+        id="btn-reset-demo"
+        class="text-[11px] text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 px-2.5 py-1 rounded transition-colors"
+        title="Restaurar inventario y limpiar registros de prueba"
+      >
+        Reiniciar Demo
+      </button>
+    </div>
+  </header>
+
+  <!-- 2. CONTENEDOR PRINCIPAL: SIDEBAR + ÁREA DE TRABAJO -->
+  <div class="flex flex-1 overflow-hidden">
+
+    <!-- SIDEBAR DE NAVEGACIÓN -->
+    <aside class="w-64 bg-slate-900 border-r border-slate-800 flex flex-col justify-between shrink-0 select-none">
+      <div class="p-4 space-y-6">
+        <!-- Menú Principal -->
+        <div>
+          <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-3 mb-2">
+            Módulos del Sistema
+          </p>
+          <nav class="space-y-1">
+            <!-- Pestaña 1: POS -->
+            <button
+              data-nav-tab="pos"
+              class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs transition-all duration-150 bg-brand-navy text-brand-pearl font-semibold shadow-sm text-left"
+            >
+              <svg class="w-4 h-4 shrink-0 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+              </svg>
+              <span>POS & Facturación</span>
+            </button>
+
+            <!-- Pestaña 2: Libro Diario Contable -->
+            <button
+              data-nav-tab="accounting"
+              class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs transition-all duration-150 text-slate-300 hover:bg-slate-800 text-left"
+            >
+              <svg class="w-4 h-4 shrink-0 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+              </svg>
+              <span>Libro Diario Contable</span>
+            </button>
+
+            <!-- Pestaña 3: Libro de Ventas -->
+            <button
+              data-nav-tab="sales"
+              class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs transition-all duration-150 text-slate-300 hover:bg-slate-800 text-left"
+            >
+              <svg class="w-4 h-4 shrink-0 text-sky-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+              <span>Libro de Ventas</span>
+            </button>
+
+            <!-- Pestaña 4: Inventario -->
+            <button
+              data-nav-tab="inventory"
+              class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-xs transition-all duration-150 text-slate-300 hover:bg-slate-800 text-left"
+            >
+              <svg class="w-4 h-4 shrink-0 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+              </svg>
+              <span>Inventario y Stock</span>
+            </button>
+          </nav>
+        </div>
+
+        <!-- Atajos de Teclado Rápido -->
+        <div class="bg-slate-800/80 rounded-lg p-3 border border-slate-700/60 text-[11px] text-slate-300">
+          <p class="font-bold text-brand-gold uppercase text-[10px] tracking-wider mb-2">Atajos de Teclado</p>
+          <div class="space-y-1.5 font-mono text-[11px]">
+            <div class="flex justify-between">
+              <span class="text-slate-400">Facturar / Cobrar:</span>
+              <kbd class="bg-slate-900 px-1.5 py-0.5 rounded text-white border border-slate-700">F12</kbd>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Cerrar / Cancelar:</span>
+              <kbd class="bg-slate-900 px-1.5 py-0.5 rounded text-white border border-slate-700">Esc</kbd>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">IVA por Ley:</span>
+              <span class="text-emerald-400 font-bold">13%</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-slate-400">Retención Gran Cont.:</span>
+              <span class="text-amber-400 font-bold">1% (≥$100)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie del Sidebar: Usuario en Sesión -->
+      <div class="p-3.5 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-full bg-brand-navy border border-brand-gold/40 flex items-center justify-center text-brand-pearl font-bold text-xs">
+            CA
+          </div>
+          <div class="leading-tight">
+            <p class="text-xs font-semibold text-slate-200">Cajero Principal</p>
+            <p class="text-[10px] text-emerald-400 font-medium">Turno Matutino</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- ÁREA DE CONTENIDO PRINCIPAL -->
+    <main class="flex-1 overflow-y-auto bg-slate-100 p-4 md:p-6">
+
+      <!-- ========================================== -->
+      <!-- VISTA 1: POS Y FACTURACIÓN                 -->
+      <!-- ========================================== -->
+      <section id="view-pos" class="h-full flex flex-col lg:flex-row gap-5">
+
+        <!-- PANEL IZQUIERDO: CATÁLOGO Y BUSCADOR (65%) -->
+        <div class="flex-1 flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm p-4 overflow-hidden">
+          
+          <!-- Barra de Búsqueda y Filtros de Categoría -->
+          <div class="mb-4 space-y-3 shrink-0">
+            <div class="flex items-center gap-3">
+              <!-- Input Omnibox -->
+              <div class="relative flex-1">
+                <svg class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input
+                  id="pos-search-input"
+                  type="text"
+                  placeholder="Buscar mueble, electrodoméstico, tecnología o código SKU..."
+                  class="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand-navy focus:border-brand-navy transition-colors"
+                />
+              </div>
+            </div>
+
+            <!-- Chips de Categoría -->
+            <div id="pos-category-filters" class="flex items-center gap-2 overflow-x-auto pb-1">
+              <!-- Rellenado dinámicamente por JS -->
+            </div>
+          </div>
+
+          <!-- Grilla de Tarjetas de Producto -->
+          <div class="flex-1 overflow-y-auto pr-1">
+            <div id="pos-products-grid" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3.5">
+              <!-- Tarjetas renderizadas dinámicamente -->
+            </div>
+          </div>
+        </div>
+
+        <!-- PANEL DERECHO: TICKET Y DATOS FISCALES (35%) -->
+        <div class="w-full lg:w-[420px] xl:w-[460px] flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden shrink-0">
+          
+          <!-- Encabezado del Ticket -->
+          <div class="bg-brand-navy text-white px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+              </svg>
+              <h2 class="text-xs font-bold uppercase tracking-wider">Ticket de Venta & Facturación</h2>
+            </div>
+            <span id="cart-items-count" class="bg-brand-gold text-brand-dark text-[11px] font-extrabold px-2 py-0.5 rounded-full font-mono">
+              0
+            </span>
+          </div>
+
+          <!-- Selector de Tipo de Comprobante Fiscal -->
+          <div class="p-3 border-b border-slate-200 bg-slate-50/70 space-y-3">
+            <div>
+              <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider block mb-1">
+                Tipo de Comprobante Fiscal (DTE El Salvador)
+              </label>
+              <div class="grid grid-cols-2 gap-1.5 p-1 bg-slate-200/80 rounded-lg text-xs font-semibold">
+                <button
+                  id="doctype-fac"
+                  class="py-1.5 px-2 rounded-md transition-all duration-150 text-center bg-brand-navy text-white shadow-sm"
+                >
+                  Factura (DTE-01)
+                </button>
+                <button
+                  id="doctype-ccf"
+                  class="py-1.5 px-2 rounded-md transition-all duration-150 text-center bg-white text-slate-700"
+                >
+                  Crédito Fiscal (DTE-03)
+                </button>
+              </div>
+            </div>
+
+            <!-- Formulario de Cliente: Modo Factura Consumidor Final -->
+            <div id="fac-fields" class="space-y-2">
+              <div>
+                <input
+                  id="cust-fac-name"
+                  type="text"
+                  placeholder="Nombre del Cliente (Consumidor Final)"
+                  class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                />
+              </div>
+              <div>
+                <input
+                  id="cust-fac-doc"
+                  type="text"
+                  placeholder="DUI o Documento de Identidad (Opcional)"
+                  class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-navy font-mono"
+                />
+              </div>
+            </div>
+
+            <!-- Formulario de Cliente: Modo Crédito Fiscal (Obligatorio para Contribuyentes) -->
+            <div id="ccf-fields" class="space-y-2 hidden">
+              <div>
+                <input
+                  id="cust-ccf-name"
+                  type="text"
+                  placeholder="Razón Social / Nombre Comercial *"
+                  class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-navy font-medium"
+                />
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  id="cust-ccf-nrc"
+                  type="text"
+                  placeholder="NRC (ej. 123456-7) *"
+                  class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-navy font-mono"
+                />
+                <input
+                  id="cust-ccf-nit"
+                  type="text"
+                  placeholder="NIT / DUI *"
+                  class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-navy font-mono"
+                />
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <input
+                  id="cust-ccf-giro"
+                  type="text"
+                  placeholder="Giro Comercial *"
+                  class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                />
+                <input
+                  id="cust-ccf-address"
+                  type="text"
+                  placeholder="Dirección Fiscal"
+                  class="w-full px-2.5 py-1.5 text-xs bg-white border border-slate-200 rounded-md focus:outline-none focus:ring-1 focus:ring-brand-navy"
+                />
+              </div>
+            </div>
+
+            <!-- Switch Retención 1% IVA (Gran Contribuyente) -->
+            <div class="pt-1 flex items-center justify-between border-t border-slate-200 text-xs">
+              <label for="retention-switch" class="flex items-center gap-2 cursor-pointer select-none">
+                <input
+                  id="retention-switch"
+                  type="checkbox"
+                  class="w-4 h-4 text-brand-navy rounded border-slate-300 focus:ring-brand-navy"
+                />
+                <span class="text-slate-700 font-medium">Cliente Gran Contribuyente</span>
+              </label>
+              <span class="text-[10px] text-slate-500 font-mono">(Retiene 1% si Base ≥ $100)</span>
+            </div>
+          </div>
+
+          <!-- Lista de Ítems en Carrito -->
+          <div class="flex-1 overflow-y-auto p-3 space-y-2 min-h-[160px] max-h-[300px]">
+            <div id="pos-cart-items" class="space-y-2">
+              <!-- Rellenado dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Resumen Financiero y Cálculos en Tiempo Real -->
+          <div class="p-4 border-t border-slate-200 bg-slate-50/90 space-y-2.5 shrink-0">
+            <div class="space-y-1 text-xs font-mono">
+              <div class="flex justify-between text-slate-600">
+                <span class="font-sans">Ventas Gravadas (Base Neta):</span>
+                <span id="calc-subtotal" class="font-bold text-slate-800">$0.00</span>
+              </div>
+              <div class="flex justify-between text-slate-600">
+                <span class="font-sans">Débito Fiscal IVA (13%):</span>
+                <span id="calc-iva" class="font-bold text-amber-700">$0.00</span>
+              </div>
+              <div id="calc-retention-row" class="flex justify-between text-rose-600 font-semibold hidden">
+                <span class="font-sans">(-) Retención 1% IVA (Gran Cont.):</span>
+                <span id="calc-retention" class="font-bold">-$0.00</span>
+              </div>
+            </div>
+
+            <!-- Total Destacado -->
+            <div class="bg-brand-navy rounded-xl p-3.5 text-white flex items-center justify-between shadow-sm">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-brand-gold tracking-wider block">Total a Pagar</span>
+                <span class="text-xs text-slate-300">Incluye impuestos</span>
+              </div>
+              <div class="text-right">
+                <span id="calc-total" class="text-2xl font-extrabold font-mono text-white">$0.00</span>
+              </div>
+            </div>
+
+            <!-- Botones de Acción -->
+            <div class="grid grid-cols-3 gap-2 pt-1">
+              <button
+                id="btn-clear-cart"
+                class="col-span-1 py-2.5 px-3 rounded-lg text-xs font-semibold bg-slate-200 hover:bg-slate-300 text-slate-700 transition-colors"
+              >
+                Limpiar [Esc]
+              </button>
+              <button
+                id="btn-checkout"
+                disabled
+                class="col-span-2 py-2.5 px-3 rounded-lg text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                </svg>
+                <span>Facturar & Asiento [F12]</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VISTA 2: LIBRO DIARIO CONTABLE             -->
+      <!-- ========================================== -->
+      <section id="view-accounting" class="h-full flex flex-col space-y-4 hidden">
+        <!-- Tarjeta de Resumen del Balance de Comprobación -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-4 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-brand-navy text-brand-gold flex items-center justify-center font-bold">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3"></path>
+              </svg>
+            </div>
+            <div>
+              <h2 class="text-base font-bold text-slate-900 leading-tight">Libro Diario General — Perla de Oriente</h2>
+              <p class="text-xs text-slate-500">Registro cronológico en Partida Doble conforme a NIIF y normativa contable</p>
+            </div>
+          </div>
+
+          <!-- Cifras del Balance -->
+          <div class="flex items-center gap-6 text-xs font-mono">
+            <div>
+              <span class="text-[10px] text-slate-400 block uppercase font-sans">Total Asientos:</span>
+              <span id="ledger-entry-count" class="font-extrabold text-slate-800 text-sm">0</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-400 block uppercase font-sans">Total Debe:</span>
+              <span id="ledger-total-debit" class="font-extrabold text-emerald-700 text-sm">$0.00</span>
+            </div>
+            <div>
+              <span class="text-[10px] text-slate-400 block uppercase font-sans">Total Haber:</span>
+              <span id="ledger-total-credit" class="font-extrabold text-emerald-700 text-sm">$0.00</span>
+            </div>
+            <div id="ledger-balance-badge">
+              <!-- Badge de estado -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Contenedor de Partidas de Diario -->
+        <div id="journal-entries-container" class="flex-1 overflow-y-auto space-y-4 pr-1">
+          <!-- Rellenado dinámicamente -->
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VISTA 3: LIBRO DE VENTAS                   -->
+      <!-- ========================================== -->
+      <section id="view-sales" class="h-full flex flex-col space-y-4 hidden">
+        <!-- KPI Cards de Ventas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Comprobantes Emitidos</span>
+            <p id="sales-stat-count" class="text-2xl font-extrabold font-mono text-slate-800 mt-1">0</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Ventas Gravadas (Neto)</span>
+            <p id="sales-stat-base" class="text-2xl font-extrabold font-mono text-slate-800 mt-1">$0.00</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Débito Fiscal IVA (13%)</span>
+            <p id="sales-stat-iva" class="text-2xl font-extrabold font-mono text-amber-600 mt-1">$0.00</p>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Recaudado</span>
+            <p id="sales-stat-total" class="text-2xl font-extrabold font-mono text-brand-navy mt-1">$0.00</p>
+          </div>
+        </div>
+
+        <!-- Tabla del Libro de Ventas -->
+        <div class="flex-1 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="p-4 border-b border-slate-200 bg-slate-50/60 flex items-center justify-between">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Registro Fiscal de Operaciones</h3>
+            <span class="text-xs text-slate-500 font-medium">Libro de Ventas a Consumidor Final y Contribuyentes</span>
+          </div>
+
+          <div class="flex-1 overflow-y-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 text-slate-600 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200 sticky top-0">
+                <tr>
+                  <th class="py-2.5 px-4">N° Comprobante</th>
+                  <th class="py-2.5 px-4">Fecha / Hora</th>
+                  <th class="py-2.5 px-4">Tipo Doc.</th>
+                  <th class="py-2.5 px-4">Cliente / Razón Social</th>
+                  <th class="py-2.5 px-4 text-right">Base Gravada</th>
+                  <th class="py-2.5 px-4 text-right">IVA 13%</th>
+                  <th class="py-2.5 px-4 text-right">Ret. 1%</th>
+                  <th class="py-2.5 px-4 text-right">Total</th>
+                  <th class="py-2.5 px-4 text-center">Acciones</th>
+                </tr>
+              </thead>
+              <tbody id="sales-history-tbody" class="divide-y divide-slate-100">
+                <!-- Rellenado dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ========================================== -->
+      <!-- VISTA 4: INVENTARIO                        -->
+      <!-- ========================================== -->
+      <section id="view-inventory" class="h-full flex flex-col space-y-4 hidden">
+        <!-- Indicadores de Stock -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Total Unidades en Bodega</span>
+              <p id="inv-stat-items" class="text-2xl font-extrabold font-mono text-slate-800 mt-1">0</p>
+            </div>
+            <div class="p-3 rounded-lg bg-blue-50 text-brand-navy">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path></svg>
+            </div>
+          </div>
+          <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Alertas de Bajo Stock (≤2)</span>
+              <p id="inv-stat-low" class="text-2xl font-extrabold font-mono text-amber-600 mt-1">0</p>
+            </div>
+            <div class="p-3 rounded-lg bg-amber-50 text-amber-600">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de Inventario -->
+        <div class="flex-1 bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+          <div class="p-4 border-b border-slate-200 bg-slate-50/60 flex items-center justify-between">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-700">Catálogo de Mercaderías y Existencias</h3>
+            <span class="text-xs text-slate-500 font-medium">Control en tiempo real de bodega San Miguel</span>
+          </div>
+
+          <div class="flex-1 overflow-y-auto">
+            <table class="w-full text-left text-xs">
+              <thead class="bg-slate-100 text-slate-600 font-semibold uppercase text-[10px] tracking-wider border-b border-slate-200 sticky top-0">
+                <tr>
+                  <th class="py-2.5 px-4">Código SKU</th>
+                  <th class="py-2.5 px-4">Descripción del Artículo</th>
+                  <th class="py-2.5 px-4">Categoría</th>
+                  <th class="py-2.5 px-4 text-right">Precio Base Neto</th>
+                  <th class="py-2.5 px-4 text-right">Precio c/IVA</th>
+                  <th class="py-2.5 px-4 text-center">Stock Físico</th>
+                  <th class="py-2.5 px-4 text-center">Estado</th>
+                  <th class="py-2.5 px-4 text-center">Reabastecer</th>
+                </tr>
+              </thead>
+              <tbody id="inventory-tbody" class="divide-y divide-slate-100">
+                <!-- Rellenado dinámicamente -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MODAL DE COMPROBANTE TRIBUTARIO (DTE)      -->
+  <!-- ========================================== -->
+  <div id="voucher-modal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 hidden overflow-y-auto">
+    <div id="voucher-modal-card" class="bg-white rounded-2xl shadow-2xl border border-slate-200 w-full max-w-3xl max-h-[90vh] flex flex-col overflow-hidden animate-in fade-in duration-200">
+      
+      <!-- Barra Superior de Control del Modal (No se imprime) -->
+      <div class="bg-brand-dark text-white px-5 py-3 flex items-center justify-between no-print shrink-0 border-b border-brand-navy">
+        <div class="flex items-center gap-2">
+          <svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+          </svg>
+          <span class="text-xs font-bold uppercase tracking-wide">Vista Previa de Comprobante Fiscal DTE</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button
+            id="btn-print-voucher"
+            class="bg-brand-gold hover:bg-[#b38843] text-brand-dark font-bold text-xs px-3.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm"
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+            </svg>
+            <span>Imprimir [Ctrl + P]</span>
+          </button>
+          <button
+            id="btn-close-modal"
+            class="text-slate-400 hover:text-white p-1.5 rounded-lg hover:bg-white/10 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenido Imprimible del Comprobante Fiscal -->
+      <div id="voucher-printable-content" class="p-6 overflow-y-auto flex-1 bg-white">
+        <!-- Rellenado dinámicamente por JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TOAST DE NOTIFICACIONES                    -->
+  <!-- ========================================== -->
+  <div id="toast-notification" class="fixed bottom-5 right-5 z-50 flex items-center gap-2.5 px-4 py-3 rounded-xl border shadow-xl opacity-0 translate-y-4 pointer-events-none transition-all duration-300">
+    <div id="toast-icon"></div>
+    <span id="toast-message" class="text-xs font-semibold"></span>
+  </div>
+
+  <!-- SCRIPT DE APLICACIÓN MODULAR ES6 -->
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
+
