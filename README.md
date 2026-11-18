@@ -6,6 +6,10 @@ Este proyecto es una solución moderna de software para la gestión comercial y 
 2. **Generación automática de Asientos Contables en Partida Doble** (Libro Diario, Cuentas "T" de Mayorización y Balance de Sumas Iguales).
 3. **Liquidación Tributaria** (Simulador de Declaración de IVA Formulario F-07).
 
+> [!TIP]
+> **¿Vas a colaborar o meter código en el proyecto?**  
+> Lee primero la **[Guía de Desarrollo y Onboarding (docs/GUIA_DESARROLLO.md)](docs/GUIA_DESARROLLO.md)** para conocer el flujo de ramas en `version/1.0`, la arquitectura y qué archivos tocar.
+
 ---
 
 ## 📁 Estructura del Proyecto
