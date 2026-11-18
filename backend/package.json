@@ -1,0 +1,23 @@
+{
+  "name": "pos-facturacion-contabilidad-backend",
+  "version": "1.0.0",
+  "description": "Backend API REST para POS, Facturación DTE y Contabilidad NIIF de Comercial Perla de Oriente",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "keywords": [
+    "pos",
+    "facturacion",
+    "dte",
+    "contabilidad",
+    "niif",
+    "el-salvador",
+    "iva"
+  ],
+  "author": "Comercial Perla de Oriente S.A. de C.V.",
+  "license": "ISC"
+}
+

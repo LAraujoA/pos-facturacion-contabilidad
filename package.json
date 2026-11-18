@@ -1,0 +1,22 @@
+{
+  "name": "pos-facturacion-contabilidad",
+  "version": "1.0.0",
+  "description": "Sistema Integral de Punto de Venta (POS), Facturación Electrónica (DTE) y Contabilidad NIIF en Partida Doble para Comercial Perla de Oriente S.A. de C.V.",
+  "type": "module",
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "node --watch backend/src/server.js",
+    "backend": "node backend/src/server.js"
+  },
+  "keywords": [
+    "pos",
+    "facturacion",
+    "dte",
+    "contabilidad",
+    "partida-doble",
+    "el-salvador"
+  ],
+  "author": "Comercial Perla de Oriente S.A. de C.V.",
+  "license": "ISC"
+}
+
